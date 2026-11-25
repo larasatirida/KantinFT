@@ -1,4 +1,11 @@
 import json
+import logging
+from .order_service import create_order
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+
 def response(status_code, body):
     return {
         "statusCode": status_code,
@@ -10,38 +17,51 @@ def response(status_code, body):
 
 
 def lambda_handler(event, context):
-    #Ambil HTTP method dan route dari API Gateway
-    method = event.get("requestContext", {}).get(
-        "http", {}
-    ).get("method")
+    method = event.get("requestContext", {}).get("http", {}).get("method")
+    path = event.get("rawPath", "")
 
-    route = event.get("routeKey", "")
+    try:
+        if method == "POST" and path == "/orders":
+            data = json.loads(event.get("body") or "{}")
+            order = create_order(data)
 
-    #Create order
-    if method == "POST" and route == "POST /orders":
-        return response(200, {
-            "message": "Create order endpoint is ready"
+            return response(201, {
+                "message": "Order created successfully",
+                "data": order
+            })
+
+        elif method == "GET" and path == "/orders":
+            return response(501, {
+                "message": "Read orders not implemented yet"
+            })
+
+        elif method == "PUT" and path.startswith("/orders/"):
+            return response(501, {
+                "message": "Update order not implemented yet"
+            })
+
+        elif method == "DELETE" and path.startswith("/orders/"):
+            return response(501, {
+                "message": "Delete order not implemented yet"
+            })
+
+        return response(404, {
+            "message": "Route not found"
         })
 
-    #Read orders
-    elif method == "GET" and route == "GET /orders":
-        return response(200, {
-            "message": "Get orders endpoint is ready"
+    except json.JSONDecodeError:
+        return response(400, {
+            "message": "Invalid JSON format"
         })
 
-    #Update order
-    elif method == "PUT" and route == "PUT /orders/{id}":
-        return response(200, {
-            "message": "Update order endpoint is ready"
+    except ValueError as error:
+        return response(400, {
+            "message": str(error)
         })
 
-    #Delete order
-    elif method == "DELETE" and route == "DELETE /orders/{id}":
-        return response(200, {
-            "message": "Delete order endpoint is ready"
-        })
+    except Exception:
+        logger.exception("Failed to process request")
 
-    #Route tidak ditemukan
-    return response(404, {
-        "message": "Route not found"
-    })
+        return response(500, {
+            "message": "Internal server error"
+        })

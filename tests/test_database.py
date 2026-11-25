@@ -1,23 +1,29 @@
 import unittest
 from unittest.mock import patch
-from src.database import get_table, TABLE_NAME
+from src.database import (
+    BUCKET_NAME,
+    get_s3_client,
+    get_order_key
+)
+
 
 class TestDatabase(unittest.TestCase):
 
-    @patch("src.database.boto3.resource")
-    def test_get_table(self, mock_resource):
-        mock_dynamodb = mock_resource.return_value
-        mock_table = mock_dynamodb.Table.return_value
+    @patch("src.database.boto3.client")
+    def test_get_s3_client(self, mock_client):
+        result = get_s3_client()
 
-        result = get_table()
+        mock_client.assert_called_once_with("s3")
+        self.assertEqual(result, mock_client.return_value)
 
-        mock_resource.assert_called_once_with("dynamodb")
-        mock_dynamodb.Table.assert_called_once_with(TABLE_NAME)
+    def test_bucket_name(self):
+        self.assertTrue(BUCKET_NAME)
 
-        self.assertEqual(result, mock_table)
+    def test_get_order_key(self):
+        result = get_order_key("abc123")
 
-    def test_table_name(self):
-        self.assertEqual(TABLE_NAME, "KantinOrders")
+        self.assertEqual(result, "orders/abc123.json")
+
 
 if __name__ == "__main__":
     unittest.main()
