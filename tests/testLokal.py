@@ -22,8 +22,8 @@ class TestLambdaHandler(unittest.TestCase):
     @patch("src.lambda_function.create_order")
     def test_create_order(self, mock_create_order):
         data = {
-            "customer_name": "Mahasiswa A",
-            "tenant_name": "Kantin FT",
+            "customer_name": "Rila",
+            "tenant_name": "Masakan Jawa",
             "food_name": "Nasi Ayam",
             "quantity": 2,
             "unit_price": 15000,

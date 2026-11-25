@@ -96,8 +96,8 @@ Setiap pesanan direpresentasikan sebagai satu objek JSON. Amazon S3 digunakan se
 ```json
 {
   "order_id": "550e8400-e29b-41d4-a716-446655440000",
-  "customer_name": "Mahasiswa A",
-  "tenant_name": "Kantin FT",
+  "customer_name": "Rila",
+  "tenant_name": "Masakan Jawa",
   "food_name": "Nasi Ayam",
   "quantity": 2,
   "unit_price": 15000,
@@ -198,7 +198,7 @@ Pengujian konektivitas awal telah berhasil dilakukan menggunakan AWS Lambda dan 
 ## Dokumentasi
 
 - [Architecture Diagram](docs/KantinFT.drawio.png)
-- [Design Brief](docs/design-brief.pdf)
+- [Design Brief](docs/kantinft-design-brief.pdf)
 - [Deployment Plan](docs/deployment-plan.md)
 - [AWS Evidence](evidence/)
 

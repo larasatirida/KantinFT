@@ -9,8 +9,8 @@ class TestOrderService(unittest.TestCase):
 
     def setUp(self):
         self.valid_data = {
-            "customer_name": "Mahasiswa A",
-            "tenant_name": "Kantin FT",
+            "customer_name": "Rila",
+            "tenant_name": "Masakan Jawa",
             "food_name": "Nasi Ayam",
             "quantity": 2,
             "unit_price": 15000,
